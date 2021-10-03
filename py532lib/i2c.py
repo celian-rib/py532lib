@@ -142,6 +142,14 @@ class Pn532_i2c:
             else:
                 pass
 
+    def has_mifare_available(self):
+        try:
+            frame = Pn532Frame(frame_type=PN532_FRAME_TYPE_DATA, data=bytearray([PN532_COMMAND_INLISTPASSIVETARGET, 0x01, 0x00]))
+            self.PN532.transaction(writing(self.address, frame.to_tuple()))
+            return True
+        except:
+            return False
+
     def read_mifare(self):
         """Wait for a MiFARE card to be in the PN532's field, and read it's UID."""
         frame = Pn532Frame(frame_type=PN532_FRAME_TYPE_DATA, data=bytearray([PN532_COMMAND_INLISTPASSIVETARGET, 0x01, 0x00]))
